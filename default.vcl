@@ -38,7 +38,7 @@ sub vcl_recv {
         if(req.http.X-Content-Tags) {
             ban("obj.http.X-Content-Tags ~ " + req.http.X-Content-Tags);
         }
-        elseif(req.http.X-Url-To-Ban) {
+        else if(req.http.X-Url-To-Ban) {
             ban("obj.http.X-Url ~ " + req.http.X-Url-To-Ban);
         }
         else {
@@ -59,10 +59,10 @@ sub vcl_recv {
         if (req.url ~ "\.(jpg|png|gif|gz|tgz|bz2|tbz|mp3|ogg)$") {
             unset req.http.Accept-Encoding;
         }
-        elsif (req.http.Accept-Encoding ~ "gzip") {
+        else if (req.http.Accept-Encoding ~ "gzip") {
             set req.http.Accept-Encoding = "gzip";
         }
-        elsif (req.http.Accept-Encoding ~ "deflate") {
+        else if (req.http.Accept-Encoding ~ "deflate") {
             set req.http.Accept-Encoding = "deflate";
         }
         else {
