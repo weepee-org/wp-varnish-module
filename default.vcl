@@ -30,7 +30,7 @@ if (req.method == "PURGE") {
         return (synth(405,"Not allowed."));
     }
 
-    if(!req.http.X-Content-Tags && !req.http.X-Url-To-Ban && !req.http.X-Purge_All){
+    if(!req.http.X-Content-Tags && !req.http.X-Url-To-Ban && !req.http.X-Purge-All){
 	return (synth(400, "Content tags or url header required"));
     }
 

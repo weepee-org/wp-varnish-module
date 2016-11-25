@@ -8,7 +8,7 @@ class WPVarnish_Processor {
     const TAG_PREFIX = 'tag_';
     const CONTENT_TAG_HEADER = 'X-Content-Tags';
     const URL_HEADER = 'X-Url-To-Ban';
-    const PURGE_ALL_HEADER = 'X-Purge_All';
+    const PURGE_ALL_HEADER = 'X-Purge-All';
 
     private $purge_addr = '';
 
