@@ -19,6 +19,7 @@ sub vcl_backend_response {
 
 sub vcl_deliver {
   unset resp.http.X-Url;
+  unset resp.http.X-Content-Tags;
 }
 
 
