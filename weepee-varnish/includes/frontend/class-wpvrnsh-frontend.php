@@ -52,7 +52,7 @@ if ( ! class_exists( 'WPVarnish_Frontend' ) ) {
         public function add_page_purge_option($admin_bar){
             $admin_bar->add_menu( array(
                 'id'	=> 'purge-page',
-                'title' => 'Purge Page',
+                'title' => 'Purge Page (Varnish)',
                 'href'  => wp_nonce_url( add_query_arg('purge_current_page', 1), 'purge-current-page')
             ));
         }

@@ -8,15 +8,23 @@ class WPVarnish_Processor {
     const TAG_PREFIX = 'tag_';
     const CONTENT_TAG_HEADER = 'X-Content-Tags';
     const URL_HEADER = 'X-Url-To-Ban';
+    const PURGE_ALL_HEADER = 'X-Purge_All';
 
     private $purge_addr = '';
 
     public function __construct() {
+        $this->setPurgeAddr();
+        return;
+    }
+
+    private function setPurgeAddr(){
         $env_variable_for_purge_ip = getenv('ENV_FOR_PURGE_IP');
         $env_variable_for_purge_port = getenv('ENV_FOR_PURGE_PORT');
         $purge_ip = getenv($env_variable_for_purge_ip);
         $purge_port = getenv($env_variable_for_purge_port);
+
         $this->purge_addr = $purge_ip . ':' . $purge_port;
+        return;
     }
 
     public function purge_tags($tags_to_ban) {
@@ -28,7 +36,7 @@ class WPVarnish_Processor {
                 'headers' => array( static::CONTENT_TAG_HEADER => $tags_to_ban) 
             ) 
         );
-        
+
         $this->handle_varnish_response($response);
         return;
     }
@@ -41,7 +49,20 @@ class WPVarnish_Processor {
                 'headers' => array( static::URL_HEADER => $url) 
             )
         );
-        
+
+        $this->handle_varnish_response($response);
+        return;
+    }
+    
+    public function purge_all() {
+        $response = wp_remote_request(
+            'http://' . $this->purge_addr,
+            array(
+                'method' => 'PURGE',
+                'headers' => array( static::PURGE_ALL_HEADER => 1) 
+            )
+        );
+
         $this->handle_varnish_response($response);
         return;
     }

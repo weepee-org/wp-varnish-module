@@ -18,7 +18,8 @@ if (!class_exists('WPVarnish'))
     {
         protected static $_instance = null;
         private $content_tags = array();
-
+        private $varnish_processor;
+        
         public static function instance()
         {
             if (is_null(self::$_instance)) {
@@ -27,10 +28,12 @@ if (!class_exists('WPVarnish'))
 
             return self::$_instance;
         }
-        
-         public function __construct()
+
+        public function __construct()
         {
             $this->init_includes();
+            $this->varnish_processor = new WPVarnish_Processor;
+            $this->init_hooks();
             return;
         }
 
@@ -52,7 +55,26 @@ if (!class_exists('WPVarnish'))
                 return ( ! is_admin() || defined( 'DOING_AJAX' ) ) && ! defined( 'DOING_CRON' );
             }
         }
-        
+
+        private function init_hooks(){
+            add_action( 'admin_bar_menu', array( $this, 'add_varnish_purge_option' ), 99 );
+            add_action( 'shutdown', array( $this, 'purge_listener' ) );   
+        }
+
+        public function add_varnish_purge_option($admin_bar){
+            $admin_bar->add_menu( array(
+                'id'	=> 'purge-all',
+                'title' => 'Purge All (Varnish)',
+                'href'  => wp_nonce_url( add_query_arg('purge_all', 1), 'purge-all')
+            ));
+        }
+
+        public function purge_listener() {
+            if ( isset($_GET['purge_all']) && check_admin_referer('purge-all') ) {
+                $this->varnish_processor->purge_all();
+            }
+        }
+
     }
 
 }
