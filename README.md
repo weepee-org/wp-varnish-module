@@ -1,4 +1,4 @@
-# wp-varnish-module
+# A Wordpress Varnish Module by Weepee Telecom
 
 ## Tags and Bans following content:
 - Posts
